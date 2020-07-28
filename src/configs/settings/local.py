@@ -1,4 +1,3 @@
-
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -13,11 +12,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
-    'users',
     'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -27,10 +24,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
-    'sendgrid',
     'storages',
-    'boto'
-
 ]
 
 MIDDLEWARE = [
@@ -107,8 +101,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'users.CustomUser'
-
 #logging
 LOGGING = {
     'version': 1,
@@ -127,29 +119,19 @@ LOGGING = {
     }
 }
 
-
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'middlewares.authentication.AuthenticationJWT',
-    ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ],
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    #     'middlewares.authentication.AuthenticationJWT',
+    # ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 
 }
 
-#mail
-
-#s3
-AWS_ACCESS_KEY_ID = 'AKIA3L32VIJCS5AR33NL'
-AWS_SECRET_ACCESS_KEY = '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'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_STORAGE_BUCKET_NAME = 'booking-tours'
-AWS_S3_REGION_NAME = 'ap-southeast-1'
-AWS_S3_FILE_OVERWRITE = False
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 

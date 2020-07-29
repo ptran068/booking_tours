@@ -1,6 +1,6 @@
 from django.contrib import admin
-from.models import Tours
+from.models import Categories
 
 # Register your models here.
 
-admin.site.register(Tours)
+admin.site.register(Categories)

@@ -1,5 +1,5 @@
-from .models import Tours, Categories
-from .serializers import ToursSerializer, CategoriSerializer
+from .models import Tours
+from .serializers import ToursSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
@@ -23,7 +23,7 @@ class PostToursList(APIView):
     def post(self, request, format=None):
         serializer = ToursSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(createdBy=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -63,22 +63,3 @@ class EditToursListDetail(APIView):
         snippet = self.get_object(pk)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-class CategoryList(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request, format=None):
-        snippets = Categories.objects.all()
-        serializer = CategoriSerializer(snippets, many=True)
-        return Response(serializer.data)
-
-class PostCategoryList(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [AuthenticationJWT]
-
-    def post(self, request, format=None):
-        serializer = CategoriSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -1,11 +1,5 @@
 from rest_framework import serializers
-from .models import Categories, Tours
-
-class CategoriSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Categories
-        fields = '__all__'
+from .models import Tours
 
 class ToursSerializer(serializers.ModelSerializer):
 

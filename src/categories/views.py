@@ -6,15 +6,13 @@ from rest_framework import status
 from rest_framework.views import APIView
 from middlewares.authentication import AuthenticationJWT
 
-# Create your views here.
-
 class CategoryList(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, format=None):
         snippets = Categories.objects.all()
         serializer = CategoriSerializer(snippets, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class PostCategoryList(APIView):
     permission_classes = [IsAuthenticated]

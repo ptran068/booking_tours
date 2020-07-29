@@ -2,6 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('category/', views.CategoryList.as_view()),
-    path('add/category/', views.PostCategoryList.as_view())
+    path('', views.CategoryList.as_view()),
+    path('add/', views.PostCategoryList.as_view())
 ]

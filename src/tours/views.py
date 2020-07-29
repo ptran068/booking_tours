@@ -5,8 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from middlewares.authentication import AuthenticationJWT
-
-# Create your views here.
+from middlewares.permission import MyUserPermissions
 
 class ToursList(APIView):
     permission_classes = [AllowAny]
@@ -23,7 +22,7 @@ class PostToursList(APIView):
     def post(self, request, format=None):
         serializer = ToursSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(createdBy=request.user)
+            serializer.save(created_by=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -41,8 +40,8 @@ class ToursListDetail(APIView):
         serializer = ToursSerializer(snippet)
         return Response(serializer.data)
 
-class EditToursListDetail(APIView):
-    permission_classes = [IsAuthenticated]
+class EditOrDeleteToursDetail(APIView):
+    permission_classes = [MyUserPermissions]
     authentication_classes = [AuthenticationJWT]
 
     def get_object(self, pk):

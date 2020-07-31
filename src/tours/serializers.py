@@ -5,4 +5,4 @@ class ToursSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tours
-        fields = '__all__'
+        fields = ('id', 'avg_rating')

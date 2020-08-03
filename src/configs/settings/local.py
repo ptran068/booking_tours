@@ -26,6 +26,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'files',
     'users',
     'corsheaders',
     'django.contrib.admin',
@@ -145,6 +146,20 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 
 }
+
+#AWS
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID'),
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
+AWS_S3_FILE_OVERWRITE = env('AWS_S3_FILE_OVERWRITE')
+AWS_ORIGINAL_LINK = env('AWS_ORIGINAL_LINK')
+AWS_DEFAULT_ACL = None
+
+#FILE
+UPLOAD_FILE_MAX_SIZE = 10485760
+FILE_FORMAT = ['png', 'jpg', 'gif', 'jpeg']
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

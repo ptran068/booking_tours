@@ -78,7 +78,8 @@ TEMPLATES = [
 
 # WSGI_APPLICATION = 'src.wsgi.application'
 CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8000',
+    env('API_HOST'),
+    env('FE_HOST')
 )
 
 # Database

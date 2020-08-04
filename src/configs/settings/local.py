@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'storages',
+    'categories',
+    'tours',
 ]
 
 MIDDLEWARE = [
@@ -176,3 +178,4 @@ USE_L10N = True
 
 USE_TZ = True
 
+PAGESIZE = env("PAGESIZE")

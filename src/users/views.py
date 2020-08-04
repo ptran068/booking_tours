@@ -34,8 +34,16 @@ class Login(ObtainAuthToken):
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30)
             }
             refreshToken = jwt.encode(payloadRefreshToken, settings.REFRESH_JWT_SECRET)
-
+            user_data = {
+                'id': user.id,
+                'phone': user.phone,
+                'email': user.email,
+                'is_superuser': user.is_superuser,
+                'iat': datetime.datetime.utcnow(),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30)
+            }
             return Response({
+                'user': user_data,
                 'token': token,
                 'refreshToken': refreshToken
             })

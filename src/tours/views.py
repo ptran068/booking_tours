@@ -7,7 +7,7 @@ from django.conf import settings
 from rest_framework.views import APIView
 from middlewares.authentication import AuthenticationJWT
 from middlewares.permission import MyUserPermissions
-from django.core.paginator import PageNotAnInteger, EmptyPage, Paginat
+from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
 from rest_framework import filters
 
 class ToursList(APIView):
@@ -21,11 +21,8 @@ class ToursList(APIView):
         pagesize = int(settings.PAGESIZE)
         page_total = round(Tours.objects.all().count() / pagesize + 0.5)
         paginator = Paginator(tours, pagesize)
-        page = request.GET.get("page", 1)
+        page = request.GET.get("page", "1").isdigit() and int(request.GET.get("page", "1")) or 1
         try:
-            paginated_querySet = paginator.page(page)
-        except PageNotAnInteger:
-            page = 1
             paginated_querySet = paginator.page(page)
         except EmptyPage:
             paginated_querySet = paginator.page(paginator.num_pages)
@@ -59,6 +56,8 @@ class ToursListDetail(APIView):
 
     def get(self, request, pk, format=None):
         tour = self.get_object(pk)
+        tour.views +=1
+        tour.save()
         serializer = ToursSerializer(tour)
         return Response(serializer.data)
 

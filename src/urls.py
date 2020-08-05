@@ -1,6 +1,6 @@
-
 from django.contrib import admin
 from django.urls import path, include
+
 
 urlpatterns = [
     path('tour/', include('tours.urls')),
@@ -8,5 +8,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/', include('users.urls')),
     path('file/', include('files.urls')),
-
+    path('review/', include('reviews.urls')),
 ]

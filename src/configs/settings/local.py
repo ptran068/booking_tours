@@ -28,6 +28,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'files',
     'users',
+    'payments',
     'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
+    'reviews',
     'storages',
     'categories',
     'tours',
@@ -144,7 +146,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'middlewares.authentication.AuthenticationJWT',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10,
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 
@@ -163,6 +165,11 @@ AWS_DEFAULT_ACL = None
 #FILE
 UPLOAD_FILE_MAX_SIZE = 10485760
 FILE_FORMAT = ['png', 'jpg', 'gif', 'jpeg']
+
+
+#STRIPE
+STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

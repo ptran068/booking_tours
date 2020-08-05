@@ -7,7 +7,7 @@ from django.conf import settings
 from rest_framework.views import APIView
 from middlewares.authentication import AuthenticationJWT
 from middlewares.permission import MyUserPermissions
-from django.core.paginator import PageNotAnInteger, EmptyPage, Paginat
+from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
 from rest_framework import filters
 
 class ToursList(APIView):

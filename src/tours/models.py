@@ -4,6 +4,7 @@ from users.models import CustomUser
 from categories.models import Categories
 import uuid
 
+
 class Tours(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     title = models.CharField(max_length=200)
@@ -13,7 +14,7 @@ class Tours(models.Model):
     images = models.ManyToManyField(File, related_name="image_tour", blank=True, null=True)
     video_id = models.ForeignKey(File, on_delete=models.CASCADE, blank=True, null=True)
     address = models.CharField(max_length=300)
-    price = models.FloatField()
+    amount = models.IntegerField()
     duration = models.DateTimeField()
     quantity_members = models.IntegerField()
     policy = models.TextField()

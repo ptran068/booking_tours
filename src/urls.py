@@ -9,4 +9,6 @@ urlpatterns = [
     path('user/', include('users.urls')),
     path('file/', include('files.urls')),
     path('review/', include('reviews.urls')),
+    path('booking/', include('booking.urls')),
+    path('review/', include('reviews.urls')),
 ]

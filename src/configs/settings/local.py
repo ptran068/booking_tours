@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'storages',
     'categories',
     'tours',
+    'booking',
 ]
 
 MIDDLEWARE = [

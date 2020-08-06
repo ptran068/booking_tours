@@ -26,6 +26,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'comments',
     'files',
     'users',
     'corsheaders',
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'storages',
     'categories',
     'tours',
+    'booking',
 ]
 
 MIDDLEWARE = [

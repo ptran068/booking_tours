@@ -10,13 +10,12 @@ class PaymentService:
     User = get_user_model()
 
     @classmethod
-    def create_customer(cls, user, data):
+    def create_customer(cls, user):
         if user.stripe_id is not None:
             raise Exception('stripe_id already exists')        
         customer = stripe.Customer.create(
-            description=data.get('description'),
             email=user.email,
-            name=data.get('name'),
+            name=str(user.first_name + ' ' + user.last_name),
             phone=user.phone,
         )
         if customer is None:

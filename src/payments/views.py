@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from middlewares.authentication import AuthenticationJWT
 from rest_framework.permissions import IsAuthenticated
-from .serializers import CustomerSerializer, PaymentMethodSerializer, PaymentIntentSerializer, PaymentSerializer
+from .serializers import PaymentMethodSerializer, PaymentIntentSerializer, PaymentSerializer
 from .services import PaymentService
 from tours.models import Tours
 from .models import Payments
@@ -12,27 +12,6 @@ from django.conf import settings
 from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
 from rest_framework.generics import ListAPIView
 from middlewares.pagination import CustomPagination
-
-
-class Customer(APIView):
-
-    def post(self, request):
-        serializer = CustomerSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            try:
-                customer = serializer.create(user=request.user)
-                data = {
-                    "email": customer.email,
-                    'name': customer.name,
-                    'phone': customer.phone,
-                    'description': customer.description,
-                    'currency': customer.currency,
-                    'balance': customer.balance,
-                    'created': customer.created
-                }
-                return Response(data=data, status=status.HTTP_201_CREATED)
-            except Exception as e:
-                return Response({'error_msg': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PaymentMethod(APIView):

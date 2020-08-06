@@ -1,9 +1,8 @@
 from django.urls import path
-from .views import  Customer, CancelPaymentIntent, PaymentMethod, PaymentIntent, PaymentsList, RetrievePaymentIntent, ConfirmPaymentIntent
+from .views import CancelPaymentIntent, PaymentMethod, PaymentIntent, PaymentsList, RetrievePaymentIntent, ConfirmPaymentIntent
 from . import  views
 
 urlpatterns = [
-    path('customer', Customer.as_view()),
     path('', PaymentsList.as_view()),
     path('payment-method', PaymentMethod.as_view()),
     path('payment-intent', PaymentIntent.as_view()),

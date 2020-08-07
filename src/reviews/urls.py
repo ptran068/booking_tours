@@ -17,7 +17,7 @@ review_detail = views.ReviewViewSet.as_view({
 
 
 urlpatterns = [
-    path('<uuid:pk>/like', views.LikeReview, name='like'),
+    path('<uuid:pk>/like', views.like_review, name='like'),
     path('', review_list, name='review-list'),
     path('<uuid:pk>/', review_detail, name='review-detail'),
 ]

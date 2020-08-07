@@ -20,7 +20,10 @@ class Login(ObtainAuthToken):
         if serializer.is_valid():
             user = serializer.validated_data['user']
             payload = {
+                'id': str(user.id),
                 'email': user.email,
+                'phone': user.phone,
+                'stripe_id': user.stripe_id,
                 'is_superuser': user.is_superuser,
                 'iat': datetime.datetime.utcnow(),
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7)
@@ -28,7 +31,10 @@ class Login(ObtainAuthToken):
             token = jwt.encode(payload, settings.SECRET_KEY)
 
             payloadRefreshToken = {
+                'id': str(user.id),
                 'email': user.email,
+                'phone': user.phone,
+                'stripe_id': user.stripe_id,
                 'is_superuser': user.is_superuser,
                 'iat': datetime.datetime.utcnow(),
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30)
@@ -37,6 +43,7 @@ class Login(ObtainAuthToken):
             user_data = {
                 'id': user.id,
                 'phone': user.phone,
+                'stripe_id': user.stripe_id,
                 'email': user.email,
                 'is_superuser': user.is_superuser,
                 'iat': datetime.datetime.utcnow(),
@@ -64,3 +71,11 @@ class CreateUser(CreateAPIView):
 def logout(request):
     auth.logout(request)
     return redirect('/')
+
+
+class Decode_Token(APIView):
+
+    def post(self, request):
+        token = request.data['token']
+        decode = jwt.decode(token, settings.SECRET_KEY)
+        return Response(decode)

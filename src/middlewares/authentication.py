@@ -19,8 +19,7 @@ class AuthenticationJWT(BaseAuthentication):
     def authenticate(self, request):
         auth = get_authorization_header(request).split()
         if not auth or auth[0].lower() != b'token':
-            return None
-            
+            return None            
         try:
             token = auth[1]
             if token == "null":

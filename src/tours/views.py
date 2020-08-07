@@ -7,8 +7,9 @@ from django.conf import settings
 from rest_framework.views import APIView
 from middlewares.authentication import AuthenticationJWT
 from middlewares.permission import MyUserPermissions
-from django.core.paginator import PageNotAnInteger, EmptyPage, Paginat
+from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
 from rest_framework import filters
+from files.models import File
 
 class ToursList(APIView):
     permission_classes = [AllowAny]
@@ -21,11 +22,8 @@ class ToursList(APIView):
         pagesize = int(settings.PAGESIZE)
         page_total = round(Tours.objects.all().count() / pagesize + 0.5)
         paginator = Paginator(tours, pagesize)
-        page = request.GET.get("page", 1)
+        page = request.GET.get("page", "1").isdigit() and int(request.GET.get("page", "1")) or 1
         try:
-            paginated_querySet = paginator.page(page)
-        except PageNotAnInteger:
-            page = 1
             paginated_querySet = paginator.page(page)
         except EmptyPage:
             paginated_querySet = paginator.page(paginator.num_pages)
@@ -43,8 +41,14 @@ class PostToursList(APIView):
 
     def post(self, request, format=None):
         serializer = ToursSerializer(data=request.data)
+        images_id = request.data.get('images')
+        images = []
+        for image_id in images_id:
+            image = File.objects.filter(id=image_id).first()
+            if image is not None:
+                images.append(image)
         if serializer.is_valid():
-            serializer.save(created_by=request.user)
+            serializer.save(created_by=request.user, images=images)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -59,6 +63,8 @@ class ToursListDetail(APIView):
 
     def get(self, request, pk, format=None):
         tour = self.get_object(pk)
+        tour.views +=1
+        tour.save()
         serializer = ToursSerializer(tour)
         return Response(serializer.data)
 

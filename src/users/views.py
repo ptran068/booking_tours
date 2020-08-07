@@ -102,4 +102,3 @@ class Decode_Token(APIView):
         token = request.data['token']
         decode = jwt.decode(token, settings.SECRET_KEY)
         return Response(decode)
-

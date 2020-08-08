@@ -11,6 +11,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from middlewares.authentication import AuthenticationJWT, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import CreateAPIView
+from .models import CustomUser
 
 class Login(ObtainAuthToken):
     serializer_class = AuthCustomTokenSerializer
@@ -79,3 +80,18 @@ class Decode_Token(APIView):
         token = request.data['token']
         decode = jwt.decode(token, settings.SECRET_KEY)
         return Response(decode)
+
+class DetailUser(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [AuthenticationJWT]
+
+    def get_object(self, pk):
+        try:
+            return CustomUser.objects.get(pk=pk)
+        except CustomUser.DoesNotExist:
+            raise Http404
+
+    def get(self):
+        user = self.get_object(pk)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)

@@ -115,3 +115,19 @@ class PaymentService:
 
         return cancel_payment_intent
 
+    @classmethod
+    def create_charge(cls, data):
+        if data is None:
+            raise Exception('data not found')
+        charge = stripe.Charge.create(
+            amount=data.get('amount'),
+            currency='usd',
+            source=data.get('token'),
+            description=data.get('description')
+        )
+        if charge is None:
+            raise Exception('retrieve payment intent wrongs')
+
+        return charge
+    
+

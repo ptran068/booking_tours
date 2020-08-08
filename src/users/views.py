@@ -56,6 +56,8 @@ def generate_token(user):
     payload = {
         'id': str(user.id),
         'email': user.email,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
         'phone': user.phone,
         'stripe_id': user.stripe_id,
         'is_superuser': user.is_superuser,
@@ -67,6 +69,8 @@ def generate_token(user):
     payloadRefreshToken = {
         'id': str(user.id),
         'email': user.email,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
         'phone': user.phone,
         'stripe_id': user.stripe_id,
         'is_superuser': user.is_superuser,
@@ -76,6 +80,8 @@ def generate_token(user):
     refreshToken = jwt.encode(payloadRefreshToken, settings.REFRESH_JWT_SECRET)
     user_data = {
         'id': user.id,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
         'phone': user.phone,
         'stripe_id': user.stripe_id,
         'email': user.email,

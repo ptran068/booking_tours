@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CancelPaymentIntent, PaymentMethod, PaymentIntent, PaymentsList, RetrievePaymentIntent, ConfirmPaymentIntent
+from .views import CancelPaymentIntent, Charge, PaymentMethod, PaymentIntent, PaymentsList, RetrievePaymentIntent, ConfirmPaymentIntent
 from . import  views
 
 urlpatterns = [
@@ -9,5 +9,6 @@ urlpatterns = [
     path('payment-intent/retrieve', RetrievePaymentIntent.as_view()),
     path('payment-intent/confirm', ConfirmPaymentIntent.as_view()),
     path('payment-intent/cancel', CancelPaymentIntent.as_view()),
+    path('charge', Charge.as_view()),
 ]
 

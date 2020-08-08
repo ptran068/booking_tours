@@ -14,6 +14,7 @@ class UploadFile(APIView):
         if serializer.is_valid(raise_exception = True):
             file = serializer.save(file = request.data['file'])
             data = {
+                'id': file.id,
                 'name': file.name,
                 'link': file.link
             }

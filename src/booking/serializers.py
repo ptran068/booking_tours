@@ -9,7 +9,7 @@ class BookingSerializer(serializers.ModelSerializer):
 
     def get_tour(self, obj):
         return {'id': obj.tours.id, 'description': obj.tours.description,
-                'address': obj.tours.address, 'amount': obj.tours.price,
+                'address': obj.tours.address, 'amount': obj.tours.amount,
                 'duration': obj.tours.duration, 'quantity_members': obj.tours.quantity_members,
                 'policy': obj.tours.policy}
 

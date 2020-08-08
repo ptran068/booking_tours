@@ -19,13 +19,6 @@ class PaymentSerializer(serializers.ModelSerializer):
         model = Payments
         fields = '__all__'
 
-class CustomerSerializer(serializers.Serializer):
-    description = serializers.CharField(max_length = 255)
-    name = serializers.CharField(max_length = 255)
-
-    def create(self, user):
-        return PaymentService.create_customer(user=user, data=self.validated_data)
-
 
 class PaymentMethodSerializer(serializers.Serializer):
     number = serializers.CharField(max_length = 255)

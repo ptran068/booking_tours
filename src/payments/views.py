@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from middlewares.authentication import AuthenticationJWT
 from rest_framework.permissions import IsAuthenticated
-from .serializers import CustomerSerializer, PaymentMethodSerializer, PaymentIntentSerializer, PaymentSerializer
+from .serializers import PaymentMethodSerializer, PaymentIntentSerializer, PaymentSerializer
 from .services import PaymentService
 from tours.models import Tours
 from .models import Payments
@@ -12,27 +12,6 @@ from django.conf import settings
 from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
 from rest_framework.generics import ListAPIView
 from middlewares.pagination import CustomPagination
-
-
-class Customer(APIView):
-
-    def post(self, request):
-        serializer = CustomerSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            try:
-                customer = serializer.create(user=request.user)
-                data = {
-                    "email": customer.email,
-                    'name': customer.name,
-                    'phone': customer.phone,
-                    'description': customer.description,
-                    'currency': customer.currency,
-                    'balance': customer.balance,
-                    'created': customer.created
-                }
-                return Response(data=data, status=status.HTTP_201_CREATED)
-            except Exception as e:
-                return Response({'error_msg': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PaymentMethod(APIView):
@@ -181,3 +160,37 @@ class PaymentsList(APIView):
         pserializer=PaymentSerializer(result_page,many=True)
         return paginator.get_paginated_response(pserializer.data)
 
+
+
+class Charge(APIView):
+
+    def post(self, request):
+        tour_id = request.query_params.get('tour_id')
+        tour = Tours.objects.filter(id=tour_id).first()
+        if tour is None:
+            return Response({'error_msg': 'tour not found'}, status=status.HTTP_404_NOT_FOUND)
+        try:
+            charge = PaymentService.create_charge(data=request.data)
+            payment = Payments.objects.create(
+                author = request.user,
+                charge_id = charge.id,
+                payment_intent_id = charge.payment_intent,
+                amount = charge.amount,
+                tour = tour,
+                card_id = charge.payment_method,
+                description = charge.description,
+                status = 'PAID'
+            )
+            context = {
+                'id': charge.id,
+                'amount': charge.amount,
+                'created': charge.created,
+                'description': charge.description,
+                'status': charge.status,
+                'currency': charge.currency,
+                'customer': charge.customer
+            }
+            return Response(data=context, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({'error_msg': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            

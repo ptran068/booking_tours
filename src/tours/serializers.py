@@ -16,8 +16,8 @@ class FileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ToursSerializer(serializers.ModelSerializer):
-    images = FileSerializer(many=True)
-    created_by = CustomUserSerializer(many=False)
+    images = FileSerializer(many=True, read_only=True)
+    created_by = CustomUserSerializer(many=False, read_only=True)
 
     class Meta:
         model = Tours

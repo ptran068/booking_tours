@@ -9,6 +9,7 @@ from middlewares.authentication import AuthenticationJWT
 from middlewares.permission import MyUserPermissions
 from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
 from rest_framework import filters
+from files.models import File
 
 class ToursList(APIView):
     permission_classes = [AllowAny]
@@ -39,11 +40,20 @@ class PostToursList(APIView):
     authentication_classes = [AuthenticationJWT]
 
     def post(self, request, format=None):
+        images_id = request.data.get('images')
+        images = []
+        for image_id in images_id:
+            image = File.objects.filter(id=image_id).first()
+            if image is not None:
+                images.append(image)
         serializer = ToursSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(created_by=request.user)
+            serializer.save(created_by=request.user, images=images)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 class ToursListDetail(APIView):
     permission_classes = [AllowAny]

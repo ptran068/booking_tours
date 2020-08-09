@@ -12,6 +12,8 @@ from django.conf import settings
 from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
 from rest_framework.generics import ListAPIView
 from middlewares.pagination import CustomPagination
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 
 class PaymentMethod(APIView):
@@ -194,3 +196,19 @@ class Charge(APIView):
         except Exception as e:
             return Response({'error_msg': str(e)}, status=status.HTTP_400_BAD_REQUEST)
             
+
+class MailToUserAfterPayment(APIView):
+    
+    def post(self, request):
+        message = Mail(
+            subject = 'Payment From Tours',
+            from_email = settings.EMAIL_ADMIN,
+            to_emails= [
+                request.user.email,
+            ],
+            html_content = 'You have just paid the tour successfully.Thank you'
+        )
+        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+        res = sg.send(message)
+
+        return Response(data = {'msg': 'Send mail successfull'}, status=status.HTTP_200_OK)

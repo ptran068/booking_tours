@@ -173,6 +173,9 @@ FILE_FORMAT = ['png', 'jpg', 'gif', 'jpeg']
 STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
 
+#MAIL-SEND-GIRD
+EMAIL_ADMIN = env('EMAIL_ADMIN')
+SENDGRID_API_KEY = env('SENDGRID_API_KEY')
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 

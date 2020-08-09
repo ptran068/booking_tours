@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class BookList(generics.ListCreateAPIView):
+    queryset = Book.objects.all()
     serializer_class = BookingSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrPostOnly]
 
@@ -25,11 +26,15 @@ class BookList(generics.ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def get_queryset(self):
-        return Book.objects.filter(created_by=self.request.user)
+        tour_id = self.request.query_params.get('tour_id')
+        if tour_id is not None:
+            return self.queryset.filter(created_by=self.request.user, tours_id=tour_id)
+        return self.queryset.filter(created_by=self.request.user)
 
 
 class BookDetail(generics.RetrieveUpdateAPIView):
+    queryset = Book.objects.all()
     serializer_class = BookingSerializer
 
     def get_queryset(self):
-        return Book.objects.filter(created_by=self.request.user)
+        return self.queryset.filter(created_by=self.request.user)

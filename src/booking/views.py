@@ -3,11 +3,12 @@ from .serializers import BookingSerializer
 from rest_framework import generics, status
 from rest_framework.response import Response
 from middlewares.permissions import IsOwner, IsOwnerOrPostOnly
+from rest_framework.permissions import IsAuthenticated
 
 
 class BookList(generics.ListCreateAPIView):
     serializer_class = BookingSerializer
-    permission_classes = [IsOwnerOrPostOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrPostOnly]
 
     def perform_create(self, serializer):
         tour_id = self.request.query_params.get('tour_id')

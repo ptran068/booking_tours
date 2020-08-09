@@ -3,37 +3,19 @@ from .serializers import ToursSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from django.conf import settings
 from rest_framework.views import APIView
 from middlewares.authentication import AuthenticationJWT
 from middlewares.permission import MyUserPermissions
-from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
 from rest_framework import filters
 from files.models import File
+from rest_framework.generics import ListAPIView
 
-class ToursList(APIView):
+class ToursList(ListAPIView):
+    queryset = Tours.objects.all().order_by('created_at')
     permission_classes = [AllowAny]
     serializer_class = ToursSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['title', 'address']
-
-    def get(self, request, format=None):
-        tours = Tours.objects.all().order_by('created_at')
-        pagesize = int(settings.PAGESIZE)
-        page_total = round(Tours.objects.all().count() / pagesize + 0.5)
-        paginator = Paginator(tours, pagesize)
-        page = request.GET.get("page", "1").isdigit() and int(request.GET.get("page", "1")) or 1
-        try:
-            paginated_querySet = paginator.page(page)
-        except EmptyPage:
-            paginated_querySet = paginator.page(paginator.num_pages)
-        serializer = self.serializer_class(paginated_querySet, many=True)
-        content = {
-            "page": page,
-            "pagetotal": page_total,
-            "listtours": serializer.data,
-        }
-        return Response(content)
 
 class PostToursList(APIView):
     permission_classes = [IsAuthenticated]

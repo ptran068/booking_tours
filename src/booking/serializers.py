@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import Book
-from users.serializers import UserSerializer
-from tours.serializers import ToursSerializer
+from django.utils import timezone
 
 
 class BookingSerializer(serializers.ModelSerializer):
@@ -16,3 +15,8 @@ class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = '__all__'
+
+    def validate_start_date(self, value):
+        if value <= timezone.now().date():
+            raise serializers.ValidationError('The start date is wrong')
+        return value

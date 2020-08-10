@@ -14,8 +14,9 @@ class ToursList(ListAPIView):
     queryset = Tours.objects.all().order_by('created_at')
     permission_classes = [AllowAny]
     serializer_class = ToursSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['title', 'address']
+    filterset_fields = ['title']
+    ordering_fields = ['-created_at']
+
 
 class PostToursList(APIView):
     permission_classes = [IsAuthenticated]

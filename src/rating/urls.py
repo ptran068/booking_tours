@@ -1,10 +1,8 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from rating import views
-
-router = DefaultRouter()
-router.register(r'', views.RatingViewSet)
+from . import views
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', views.RatingList.as_view()),
+    path('update/<uuid:tour_id>', views.PutRating.as_view()),
+    path('create', views.PostRating.as_view())
 ]

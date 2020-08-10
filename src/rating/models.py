@@ -14,3 +14,4 @@ class Rating(models.Model):
     class Meta:
         unique_together = (('user_id', 'tour_id'))
         index_together = (('user_id', 'tour_id'))
+

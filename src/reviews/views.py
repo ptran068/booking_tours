@@ -8,6 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.generics import ListAPIView
 
 
 @api_view(['PUT'])
@@ -55,3 +56,11 @@ class ReviewViewSet(ModelViewSet):
     def get_queryset(self):
         tours_id = self.request.query_params.get('tours_id')
         return Review.objects.all().filter(tours_id=tours_id)
+
+
+class ReviewByUser(ListAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(created_by=self.request.user)

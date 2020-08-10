@@ -20,4 +20,5 @@ urlpatterns = [
     path('<uuid:pk>/like', views.like_review, name='like'),
     path('', review_list, name='review-list'),
     path('<uuid:pk>/', review_detail, name='review-detail'),
+    path('manage/', views.ReviewByUser.as_view(), name='review-by-user')
 ]

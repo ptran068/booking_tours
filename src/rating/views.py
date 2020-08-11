@@ -23,8 +23,9 @@ class PostRating(APIView):
 
     def post(self, request, format=True):
         serializer = RatingSerializer(data=request.data)
+        tour_id_id = self.request.query_params.get('tour_id')
         if serializer.is_valid():
-            serializer.save(user_id=request.user)
+            serializer.save(user_id=request.user, tour_id_id=tour_id_id)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -32,18 +33,16 @@ class PutRating(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [AuthenticationJWT]
 
-    def get_object(self, tour_id):
+    def get_object(self, pk):
         try:
-            return Rating.objects.filter(tour_id_id=tour_id)
+            return Rating.objects.get(pk=pk)
         except Rating.DoesNotExist:
             raise Http404
 
-    def put(self, request, tour_id, format=None):
-        rating_tour = self.get_object(tour_id)
-        for rating in rating_tour:
-            if rating.user_id.id == request.user.id:
-                serializer = RatingSerializer(rating, data=request.data)
-                if serializer.is_valid():
-                    serializer.save()
-                    return Response(serializer.data)
+    def put(self, request, pk, format=None):
+        rating = self.get_object(pk)
+        serializer = RatingSerializer(rating, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'tours',
     'booking',
     'rating',
+    # Django Elasticsearch integration
+    'django_elasticsearch_dsl',
+
 ]
 
 MIDDLEWARE = [
@@ -84,10 +87,10 @@ TEMPLATES = [
 ]
 
 # WSGI_APPLICATION = 'src.wsgi.application'
-CORS_ORIGIN_WHITELIST = (
+CORS_ORIGIN_WHITELIST = [
     env('API_HOST'),
     env('FE_HOST')
-)
+]
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -177,8 +180,16 @@ STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
 #MAIL-SEND-GIRD
 EMAIL_ADMIN = env('EMAIL_ADMIN')
 SENDGRID_API_KEY = env('SENDGRID_API_KEY')
-# Internationalization
-# https://docs.djangoproject.com/en/3.0/topics/i18n/
+
+
+# Elasticsearch configuration
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:9200',
+        'timeout': 30,
+    },
+}
+
 
 MESSAGES_TO_LOAD = 15
 

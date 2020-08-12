@@ -17,12 +17,13 @@ class Tours(models.Model):
     video_id = models.ForeignKey(File, on_delete=models.CASCADE, blank=True, null=True)
     address = models.CharField(max_length=300)
     amount = models.IntegerField()
-    duration = models.IntegerField()
+    duration = models.IntegerField(null=True, blank=True)
     quantity_members = models.IntegerField()
     policy = models.TextField()
     created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    limit_booking = models.IntegerField(null=True, blank=True)
 
     def avg_rating(self):
         return Rating.objects.filter(tour_id=self).aggregate(Avg('score'))

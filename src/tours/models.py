@@ -17,7 +17,7 @@ class Tours(models.Model):
     video_id = models.ForeignKey(File, on_delete=models.CASCADE, blank=True, null=True)
     address = models.CharField(max_length=300)
     amount = models.IntegerField()
-    duration = models.DateTimeField()
+    duration = models.IntegerField()
     quantity_members = models.IntegerField()
     policy = models.TextField()
     created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)

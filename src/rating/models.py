@@ -7,7 +7,7 @@ class Rating(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
     tour_id = models.ForeignKey('tours.Tours', on_delete=models.CASCADE, blank=True)
-    score = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    score = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

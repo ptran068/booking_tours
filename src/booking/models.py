@@ -9,6 +9,7 @@ class Book(models.Model):
     tours = models.ForeignKey(Tours, on_delete=models.CASCADE, related_name="tour")
     created_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name="user")
     start_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
     status = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)

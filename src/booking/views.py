@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from middlewares.permissions import IsOwner, IsOwnerOrPostOnly
 from rest_framework.permissions import IsAuthenticated
 from tours.models import Tours
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 class BookList(generics.ListCreateAPIView):
     queryset = Book.objects.all()

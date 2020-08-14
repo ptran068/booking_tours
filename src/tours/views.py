@@ -9,13 +9,20 @@ from middlewares.permission import MyUserPermissions
 from rest_framework import filters
 from files.models import File
 from rest_framework.generics import ListAPIView
+from .search import search
+from .documents import TourDocument
 
 class ToursList(ListAPIView):
-    queryset = Tours.objects.all().order_by('created_at')
-    permission_classes = [AllowAny]
+    permission_classes = []
+    authentication_classes = []
+    queryset = Tours.objects.all()
     serializer_class = ToursSerializer
-    filterset_fields = ['title']
-    ordering_fields = ['-created_at']
+
+    def get_queryset(self):
+        q = self.request.query_params.get('q')
+        if q is not None:
+            return search(q)
+        return super().get_queryset()
 
 
 class PostToursList(APIView):

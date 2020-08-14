@@ -1,3 +1,5 @@
+from pyexpat import model
+
 import jwt
 from django.conf import settings
 from rest_framework import exceptions, status
@@ -5,7 +7,6 @@ from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from rest_framework.authentication import get_authorization_header, BaseAuthentication
 from django.middleware.csrf import CsrfViewMiddleware
-from django.utils.translation import gettext_lazy as _
 import re
 
 class CSRFCheck(CsrfViewMiddleware):

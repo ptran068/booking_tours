@@ -34,17 +34,12 @@ class PostToursList(APIView):
     def post(self, request, format=None):
         images_id = request.data.get('images')
         images = []
-        for image_id in images_id:
-            image = File.objects.filter(id=image_id).first()
-            if image is not None:
-                images.append(image)
+        if images_id is not None:
+            for image_id in images_id:
+                image = File.objects.filter(id=image_id).first()
+                if image is not None:
+                    images.append(image)
         serializer = ToursSerializer(data=request.data)
-        images_id = request.data.get('images')
-        images = []
-        for image_id in images_id:
-            image = File.objects.filter(id=image_id).first()
-            if image is not None:
-                images.append(image)
         if serializer.is_valid():
             serializer.save(created_by=request.user, images=images)
             return Response(serializer.data, status=status.HTTP_201_CREATED)

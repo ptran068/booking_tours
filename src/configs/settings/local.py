@@ -181,7 +181,6 @@ STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
 EMAIL_ADMIN = env('EMAIL_ADMIN')
 SENDGRID_API_KEY = env('SENDGRID_API_KEY')
 
-
 # Elasticsearch configuration
 ELASTICSEARCH_DSL = {
     'default': {
@@ -190,6 +189,13 @@ ELASTICSEARCH_DSL = {
     },
 }
 
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = env('SENDGRID_API_KEY')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+# Internationalization
+# https://docs.djangoproject.com/en/3.0/topics/i18n/
 
 MESSAGES_TO_LOAD = 15
 
@@ -202,3 +208,4 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+

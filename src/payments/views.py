@@ -1,27 +1,20 @@
+from django.core.mail import send_mail
 from rest_framework import status
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from middlewares.authentication import AuthenticationJWT
-from rest_framework.permissions import IsAuthenticated
-from .serializers import PaymentMethodSerializer, PaymentIntentSerializer, PaymentSerializer
-from .services import PaymentService
+from rest_framework.views import APIView
+from middlewares.pagination import CustomPagination
 from tours.models import Tours
 from .models import Payments
-from rest_framework import filters
+from .serializers import PaymentMethodSerializer, PaymentIntentSerializer, PaymentSerializer
+from .services import PaymentService
 from django.conf import settings
-from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
-from rest_framework.generics import ListAPIView
-from middlewares.pagination import CustomPagination
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
-
 
 class PaymentMethod(APIView):
 
     def get(self, request):
         try:
             list_payment_method = PaymentService.get_list_payments_method_custommer(user=request.user)
-            context= []
+            context = []
             for item in list_payment_method.data:
                 data = {
                     'id': item.id,
@@ -69,13 +62,13 @@ class PaymentIntent(APIView):
             try:
                 payment_intent = serializer.create(stripe_id=request.user.stripe_id, amount=tour.amount)
                 payment = Payments.objects.create(
-                    author = request.user,
-                    payment_intent_id = payment_intent.id,
-                    amount = payment_intent.amount,
-                    tour = tour,
-                    card_id = payment_intent.payment_method,
-                    description = payment_intent.description,
-                    status = 'PENDING'
+                    author=request.user,
+                    payment_intent_id=payment_intent.id,
+                    amount=payment_intent.amount,
+                    tour=tour,
+                    card_id=payment_intent.payment_method,
+                    description=payment_intent.description,
+                    status='PENDING'
                 )
                 context = {
                     'payment_id': payment.id,
@@ -127,12 +120,12 @@ class CancelPaymentIntent(APIView):
         try:
             payment_intent = PaymentService.cancel_payment_intent(payment_intent_id=payment.payment_intent_id)
             payment.delete()
-            return Response(data= {'msg': 'Delete successfully'}, status=status.HTTP_200_OK)
+            return Response(data={'msg': 'Delete successfully'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error_msg': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class RetrievePaymentIntent(APIView):    
+class RetrievePaymentIntent(APIView):
     def get(self, request):
         payment_id = request.query_params.get('payment_id')
         payment = Payments.objects.get_payment_by_id(id=payment_id)
@@ -159,9 +152,8 @@ class PaymentsList(APIView):
         payments = Payments.objects.all().order_by('-created_at')
         paginator = CustomPagination()
         result_page = paginator.paginate_queryset(payments, request)
-        pserializer=PaymentSerializer(result_page,many=True)
+        pserializer = PaymentSerializer(result_page, many=True)
         return paginator.get_paginated_response(pserializer.data)
-
 
 
 class Charge(APIView):
@@ -174,14 +166,14 @@ class Charge(APIView):
         try:
             charge = PaymentService.create_charge(data=request.data)
             payment = Payments.objects.create(
-                author = request.user,
-                charge_id = charge.id,
-                payment_intent_id = charge.payment_intent,
-                amount = charge.amount,
-                tour = tour,
-                card_id = charge.payment_method,
-                description = charge.description,
-                status = 'PAID'
+                author=request.user,
+                charge_id=charge.id,
+                payment_intent_id=charge.payment_intent,
+                amount=charge.amount,
+                tour=tour,
+                card_id=charge.payment_method,
+                description=charge.description,
+                status='PAID'
             )
             context = {
                 'id': charge.id,
@@ -195,20 +187,16 @@ class Charge(APIView):
             return Response(data=context, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({'error_msg': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-            
+
 
 class MailToUserAfterPayment(APIView):
-    
-    def post(self, request):
-        message = Mail(
-            subject = 'Payment From Tours',
-            from_email = settings.EMAIL_ADMIN,
-            to_emails= [
-                request.user.email,
-            ],
-            html_content = 'You have just paid the tour successfully.Thank you'
-        )
-        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
-        res = sg.send(message)
 
-        return Response(data = {'msg': 'Send mail successfull'}, status=status.HTTP_200_OK)
+    def post(self, request, format=None):
+        send_mail(
+            'Payment From Tours',
+            'You have just paid the tour successfully.Thank you.',
+            settings.EMAIL_ADMIN,
+            ['ntdo.13cdt1@gmail.com', request.user.email],
+            fail_silently=False,
+        )
+        return Response(data={'msg': 'Send mail successfull'}, status=status.HTTP_200_OK)

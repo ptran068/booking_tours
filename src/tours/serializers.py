@@ -7,7 +7,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name']
+        fields = ['id', 'first_name', 'last_name']
 
 class FileSerializer(serializers.ModelSerializer):
 
@@ -23,5 +23,5 @@ class ToursSerializer(serializers.ModelSerializer):
         model = Tours
         fields = ['id', 'images', 'created_by', 'title',
                   'description', 'views', 'address', 'amount',
-                  'duration', 'quantity_members', 'policy',
+                  'duration', 'limit_booking', 'quantity_members', 'policy',
                   'category', 'video_id', 'avg_rating']

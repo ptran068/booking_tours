@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'tours',
     'booking',
     'rating',
+    'django_elasticsearch_dsl',
+
 ]
 
 MIDDLEWARE = [
@@ -182,6 +184,15 @@ EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
 EMAIL_HOST_PASSWORD = env('SENDGRID_API_KEY')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+# Elasticsearch configuration
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': env('ES_HOST'),
+        'timeout': env('ES_TIMEOUT'),
+    },
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
